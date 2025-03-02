@@ -1,5 +1,5 @@
 name: nlip_app
-description: "A new Flutter project."
+description: "A cross-platform app for nlip"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -34,9 +34,15 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  shared_preferences: ^2.2.2
   rust_lib_nlip_app:
     path: rust_builder
   flutter_rust_bridge: 2.8.0
+  freezed_annotation: ^3.0.0
+  window_size: ^0.1.0
+  window_manager: ^0.4.3
+  tray_manager: ^0.3.2
+  hotkey_manager: ^0.2.3
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +56,9 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   integration_test:
     sdk: flutter
+  freezed: ^3.0.0
+  build_runner: ^2.4.8
+  flutter_launcher_icons: ^0.14.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -61,6 +70,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/favicon.ico
+    - assets/logo.png
+    - assets/logo.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -92,3 +106,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+  adaptive_icon_background: "#FFFFFF"

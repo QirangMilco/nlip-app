@@ -6,7 +6,7 @@
 // Static analysis wrongly picks the IO variant, thus ignore this
 // ignore_for_file: argument_type_not_assignable
 
-import 'api/simple.dart';
+import 'api/nlip_api.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
@@ -24,7 +24,40 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  ApiError dco_decode_api_error(dynamic raw);
+
+  @protected
+  bool dco_decode_bool(dynamic raw);
+
+  @protected
+  Clip dco_decode_clip(dynamic raw);
+
+  @protected
+  ClipCreator dco_decode_clip_creator(dynamic raw);
+
+  @protected
+  ClipResponse dco_decode_clip_response(dynamic raw);
+
+  @protected
+  CreateSpaceResponse dco_decode_create_space_response(dynamic raw);
+
+  @protected
+  int dco_decode_i_32(dynamic raw);
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  List<Space> dco_decode_list_space(dynamic raw);
+
+  @protected
+  LoginResponse dco_decode_login_response(dynamic raw);
+
+  @protected
+  Space dco_decode_space(dynamic raw);
+
+  @protected
+  SpacesListResponse dco_decode_spaces_list_response(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -33,10 +66,50 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void dco_decode_unit(dynamic raw);
 
   @protected
+  User dco_decode_user(dynamic raw);
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  ApiError sse_decode_api_error(SseDeserializer deserializer);
+
+  @protected
+  bool sse_decode_bool(SseDeserializer deserializer);
+
+  @protected
+  Clip sse_decode_clip(SseDeserializer deserializer);
+
+  @protected
+  ClipCreator sse_decode_clip_creator(SseDeserializer deserializer);
+
+  @protected
+  ClipResponse sse_decode_clip_response(SseDeserializer deserializer);
+
+  @protected
+  CreateSpaceResponse sse_decode_create_space_response(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer);
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  List<Space> sse_decode_list_space(SseDeserializer deserializer);
+
+  @protected
+  LoginResponse sse_decode_login_response(SseDeserializer deserializer);
+
+  @protected
+  Space sse_decode_space(SseDeserializer deserializer);
+
+  @protected
+  SpacesListResponse sse_decode_spaces_list_response(
+    SseDeserializer deserializer,
+  );
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -45,17 +118,53 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_decode_unit(SseDeserializer deserializer);
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer);
-
-  @protected
-  bool sse_decode_bool(SseDeserializer deserializer);
+  User sse_decode_user(SseDeserializer deserializer);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_api_error(ApiError self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_bool(bool self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_clip(Clip self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_clip_creator(ClipCreator self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_clip_response(ClipResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_create_space_response(
+    CreateSpaceResponse self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_list_space(List<Space> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_login_response(LoginResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_space(Space self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_spaces_list_response(
+    SpacesListResponse self,
     SseSerializer serializer,
   );
 
@@ -66,10 +175,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_unit(void self, SseSerializer serializer);
 
   @protected
-  void sse_encode_i_32(int self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_bool(bool self, SseSerializer serializer);
+  void sse_encode_user(User self, SseSerializer serializer);
 }
 
 // Section: wire_class
