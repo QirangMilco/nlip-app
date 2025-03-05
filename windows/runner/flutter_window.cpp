@@ -1,14 +1,7 @@
 #include "flutter_window.h"
 
 #include <optional>
-#include <flutter/method_channel.h>
-#include <flutter/standard_method_codec.h>
-#include <flutter/encodable_value.h>
-
 #include "flutter/generated_plugin_registrant.h"
-
-#include <dwmapi.h>
-#pragma comment(lib, "dwmapi.lib")
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}

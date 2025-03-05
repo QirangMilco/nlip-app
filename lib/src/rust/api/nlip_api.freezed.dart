@@ -36,7 +36,10 @@ String toString() {
 
 }
 
-
+/// @nodoc
+class $ApiErrorCopyWith<$Res>  {
+$ApiErrorCopyWith(ApiError _, $Res Function(ApiError) __);
+}
 
 
 /// @nodoc
@@ -74,12 +77,13 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $ApiError_NetworkErrorCopyWith<$Res>  {
+abstract mixin class $ApiError_NetworkErrorCopyWith<$Res> implements $ApiErrorCopyWith<$Res> {
   factory $ApiError_NetworkErrorCopyWith(ApiError_NetworkError value, $Res Function(ApiError_NetworkError) _then) = _$ApiError_NetworkErrorCopyWithImpl;
 @useResult
 $Res call({
  String field0
 });
+
 
 
 
@@ -140,12 +144,13 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $ApiError_ServerErrorCopyWith<$Res>  {
+abstract mixin class $ApiError_ServerErrorCopyWith<$Res> implements $ApiErrorCopyWith<$Res> {
   factory $ApiError_ServerErrorCopyWith(ApiError_ServerError value, $Res Function(ApiError_ServerError) _then) = _$ApiError_ServerErrorCopyWithImpl;
 @useResult
 $Res call({
  int code, String message
 });
+
 
 
 
@@ -206,12 +211,13 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $ApiError_DeserializeErrorCopyWith<$Res>  {
+abstract mixin class $ApiError_DeserializeErrorCopyWith<$Res> implements $ApiErrorCopyWith<$Res> {
   factory $ApiError_DeserializeErrorCopyWith(ApiError_DeserializeError value, $Res Function(ApiError_DeserializeError) _then) = _$ApiError_DeserializeErrorCopyWithImpl;
 @useResult
 $Res call({
  String field0
 });
+
 
 
 
@@ -228,6 +234,72 @@ class _$ApiError_DeserializeErrorCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
   return _then(ApiError_DeserializeError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class ApiError_ClientError extends ApiError {
+  const ApiError_ClientError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of ApiError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ApiError_ClientErrorCopyWith<ApiError_ClientError> get copyWith => _$ApiError_ClientErrorCopyWithImpl<ApiError_ClientError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApiError_ClientError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'ApiError.clientError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ApiError_ClientErrorCopyWith<$Res> implements $ApiErrorCopyWith<$Res> {
+  factory $ApiError_ClientErrorCopyWith(ApiError_ClientError value, $Res Function(ApiError_ClientError) _then) = _$ApiError_ClientErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$ApiError_ClientErrorCopyWithImpl<$Res>
+    implements $ApiError_ClientErrorCopyWith<$Res> {
+  _$ApiError_ClientErrorCopyWithImpl(this._self, this._then);
+
+  final ApiError_ClientError _self;
+  final $Res Function(ApiError_ClientError) _then;
+
+/// Create a copy of ApiError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(ApiError_ClientError(
 null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -271,12 +343,13 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $ApiError_OtherCopyWith<$Res>  {
+abstract mixin class $ApiError_OtherCopyWith<$Res> implements $ApiErrorCopyWith<$Res> {
   factory $ApiError_OtherCopyWith(ApiError_Other value, $Res Function(ApiError_Other) _then) = _$ApiError_OtherCopyWithImpl;
 @useResult
 $Res call({
  String field0
 });
+
 
 
 

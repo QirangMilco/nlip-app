@@ -64,7 +64,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.8.0';
 
   @override
-  int get rustContentHash => 737554361;
+  int get rustContentHash => -1113715679;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -100,6 +100,18 @@ abstract class RustLibApi extends BaseApi {
     required String serverUrl,
     required String username,
     required String token,
+  });
+
+  Future<void> crateApiNlipApiPasteTextFromNlip({
+    required String serverUrl,
+    required String token,
+    required String spaceId,
+  });
+
+  Future<void> crateApiNlipApiUploadSelectedTextToNlip({
+    required String serverUrl,
+    required String token,
+    required String spaceId,
   });
 
   Future<ClipResponse> crateApiNlipApiUploadTextClip({
@@ -312,6 +324,80 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   );
 
   @override
+  Future<void> crateApiNlipApiPasteTextFromNlip({
+    required String serverUrl,
+    required String token,
+    required String spaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(serverUrl, serializer);
+          sse_encode_String(token, serializer);
+          sse_encode_String(spaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 7,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_api_error,
+        ),
+        constMeta: kCrateApiNlipApiPasteTextFromNlipConstMeta,
+        argValues: [serverUrl, token, spaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNlipApiPasteTextFromNlipConstMeta =>
+      const TaskConstMeta(
+        debugName: "paste_text_from_nlip",
+        argNames: ["serverUrl", "token", "spaceId"],
+      );
+
+  @override
+  Future<void> crateApiNlipApiUploadSelectedTextToNlip({
+    required String serverUrl,
+    required String token,
+    required String spaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(serverUrl, serializer);
+          sse_encode_String(token, serializer);
+          sse_encode_String(spaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 8,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_api_error,
+        ),
+        constMeta: kCrateApiNlipApiUploadSelectedTextToNlipConstMeta,
+        argValues: [serverUrl, token, spaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNlipApiUploadSelectedTextToNlipConstMeta =>
+      const TaskConstMeta(
+        debugName: "upload_selected_text_to_nlip",
+        argNames: ["serverUrl", "token", "spaceId"],
+      );
+
+  @override
   Future<ClipResponse> crateApiNlipApiUploadTextClip({
     required String serverUrl,
     required String token,
@@ -329,7 +415,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 7,
+            funcId: 9,
             port: port_,
           );
         },
@@ -370,6 +456,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 2:
         return ApiError_DeserializeError(dco_decode_String(raw[1]));
       case 3:
+        return ApiError_ClientError(dco_decode_String(raw[1]));
+      case 4:
         return ApiError_Other(dco_decode_String(raw[1]));
       default:
         throw Exception("unreachable");
@@ -397,7 +485,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       creator: dco_decode_clip_creator(arr[5]),
       createdAt: dco_decode_String(arr[6]),
       updatedAt: dco_decode_String(arr[7]),
-      filePath: dco_decode_String(arr[8]),
+      filePath: dco_decode_opt_String(arr[8]),
     );
   }
 
@@ -459,6 +547,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       jwtToken: dco_decode_String(arr[0]),
       user: dco_decode_user(arr[1]),
     );
+  }
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_String(raw);
   }
 
   @protected
@@ -540,6 +634,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return ApiError_DeserializeError(var_field0);
       case 3:
         var var_field0 = sse_decode_String(deserializer);
+        return ApiError_ClientError(var_field0);
+      case 4:
+        var var_field0 = sse_decode_String(deserializer);
         return ApiError_Other(var_field0);
       default:
         throw UnimplementedError('');
@@ -563,7 +660,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_creator = sse_decode_clip_creator(deserializer);
     var var_createdAt = sse_decode_String(deserializer);
     var var_updatedAt = sse_decode_String(deserializer);
-    var var_filePath = sse_decode_String(deserializer);
+    var var_filePath = sse_decode_opt_String(deserializer);
     return Clip(
       id: var_id,
       clipId: var_clipId,
@@ -632,6 +729,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_jwtToken = sse_decode_String(deserializer);
     var var_user = sse_decode_user(deserializer);
     return LoginResponse(jwtToken: var_jwtToken, user: var_user);
+  }
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -714,8 +822,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case ApiError_DeserializeError(field0: final field0):
         sse_encode_i_32(2, serializer);
         sse_encode_String(field0, serializer);
-      case ApiError_Other(field0: final field0):
+      case ApiError_ClientError(field0: final field0):
         sse_encode_i_32(3, serializer);
+        sse_encode_String(field0, serializer);
+      case ApiError_Other(field0: final field0):
+        sse_encode_i_32(4, serializer);
         sse_encode_String(field0, serializer);
     }
   }
@@ -737,7 +848,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_clip_creator(self.creator, serializer);
     sse_encode_String(self.createdAt, serializer);
     sse_encode_String(self.updatedAt, serializer);
-    sse_encode_String(self.filePath, serializer);
+    sse_encode_opt_String(self.filePath, serializer);
   }
 
   @protected
@@ -792,6 +903,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.jwtToken, serializer);
     sse_encode_user(self.user, serializer);
+  }
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_String(self, serializer);
+    }
   }
 
   @protected

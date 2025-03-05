@@ -54,6 +54,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LoginResponse dco_decode_login_response(dynamic raw);
 
   @protected
+  String? dco_decode_opt_String(dynamic raw);
+
+  @protected
   Space dco_decode_space(dynamic raw);
 
   @protected
@@ -102,6 +105,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LoginResponse sse_decode_login_response(SseDeserializer deserializer);
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
   Space sse_decode_space(SseDeserializer deserializer);
@@ -158,6 +164,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_login_response(LoginResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
   void sse_encode_space(Space self, SseSerializer serializer);

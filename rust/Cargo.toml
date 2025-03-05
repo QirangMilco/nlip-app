@@ -7,18 +7,45 @@ edition = "2021"
 crate-type = ["cdylib", "staticlib"]
 
 [target.'cfg(target_os = "android")'.dependencies]
-android_logger = "0.13"
+android_logger = "0.14.1"
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
 env_logger = "0.11"
 
 [dependencies]
 log = "0.4"
+thiserror = "2.0.12"
 flutter_rust_bridge = "=2.8.0"
-reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12.2", features = ["json", "rustls-tls"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.0", features = ["full"] }
+
+# Conditional dependencies for macOS
+[target.'cfg(target_os = "macos")'.dependencies]
+accessibility-ng = "0.1"
+accessibility-sys-ng = "0.1"
+core-foundation = "0.10.0"
+core-foundation-sys = "0.8.7"
+
+# Conditional dependencies for Windows
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.60.0", features = [
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_Foundation",
+    "Win32_System_Threading",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_System_DataExchange",
+    "Win32_UI_Accessibility",
+    "Win32_System_Com",
+] }
+enigo = "0.3.0"
+arboard = "3.4.1"
+
+# Conditional dependencies for Linux
+[target.'cfg(target_os = "linux")'.dependencies]
+x11-clipboard = "0.9.3"
+wl-clipboard-rs = "0.9.1"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.8.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 737554361;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1113715679;
 
 // Section: executor
 
@@ -271,6 +271,92 @@ fn wire__crate__api__nlip_api__login_impl(
         },
     )
 }
+fn wire__crate__api__nlip_api__paste_text_from_nlip_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "paste_text_from_nlip",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_server_url = <String>::sse_decode(&mut deserializer);
+            let api_token = <String>::sse_decode(&mut deserializer);
+            let api_space_id = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, crate::api::nlip_api::ApiError>(
+                    (move || async move {
+                        let output_ok = crate::api::nlip_api::paste_text_from_nlip(
+                            api_server_url,
+                            api_token,
+                            api_space_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__nlip_api__upload_selected_text_to_nlip_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "upload_selected_text_to_nlip",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_server_url = <String>::sse_decode(&mut deserializer);
+            let api_token = <String>::sse_decode(&mut deserializer);
+            let api_space_id = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, crate::api::nlip_api::ApiError>(
+                    (move || async move {
+                        let output_ok = crate::api::nlip_api::upload_selected_text_to_nlip(
+                            api_server_url,
+                            api_token,
+                            api_space_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__nlip_api__upload_text_clip_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -350,6 +436,10 @@ impl SseDecode for crate::api::nlip_api::ApiError {
             }
             3 => {
                 let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::api::nlip_api::ApiError::ClientError(var_field0);
+            }
+            4 => {
+                let mut var_field0 = <String>::sse_decode(deserializer);
                 return crate::api::nlip_api::ApiError::Other(var_field0);
             }
             _ => {
@@ -377,7 +467,7 @@ impl SseDecode for crate::api::nlip_api::Clip {
         let mut var_creator = <crate::api::nlip_api::ClipCreator>::sse_decode(deserializer);
         let mut var_createdAt = <String>::sse_decode(deserializer);
         let mut var_updatedAt = <String>::sse_decode(deserializer);
-        let mut var_filePath = <String>::sse_decode(deserializer);
+        let mut var_filePath = <Option<String>>::sse_decode(deserializer);
         return crate::api::nlip_api::Clip {
             id: var_id,
             clip_id: var_clipId,
@@ -463,6 +553,17 @@ impl SseDecode for crate::api::nlip_api::LoginResponse {
     }
 }
 
+impl SseDecode for Option<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<String>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for crate::api::nlip_api::Space {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -539,7 +640,16 @@ fn pde_ffi_dispatcher_primary_impl(
         3 => wire__crate__api__nlip_api__get_spaces_list_impl(port, ptr, rust_vec_len, data_len),
         5 => wire__crate__api__nlip_api__init_app_impl(port, ptr, rust_vec_len, data_len),
         6 => wire__crate__api__nlip_api__login_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__nlip_api__upload_text_clip_impl(port, ptr, rust_vec_len, data_len),
+        7 => {
+            wire__crate__api__nlip_api__paste_text_from_nlip_impl(port, ptr, rust_vec_len, data_len)
+        }
+        8 => wire__crate__api__nlip_api__upload_selected_text_to_nlip_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => wire__crate__api__nlip_api__upload_text_clip_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -575,8 +685,11 @@ impl flutter_rust_bridge::IntoDart for crate::api::nlip_api::ApiError {
             crate::api::nlip_api::ApiError::DeserializeError(field0) => {
                 [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::nlip_api::ApiError::Other(field0) => {
+            crate::api::nlip_api::ApiError::ClientError(field0) => {
                 [3.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::nlip_api::ApiError::Other(field0) => {
+                [4.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             _ => {
                 unimplemented!("");
@@ -779,8 +892,12 @@ impl SseEncode for crate::api::nlip_api::ApiError {
                 <i32>::sse_encode(2, serializer);
                 <String>::sse_encode(field0, serializer);
             }
-            crate::api::nlip_api::ApiError::Other(field0) => {
+            crate::api::nlip_api::ApiError::ClientError(field0) => {
                 <i32>::sse_encode(3, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+            crate::api::nlip_api::ApiError::Other(field0) => {
+                <i32>::sse_encode(4, serializer);
                 <String>::sse_encode(field0, serializer);
             }
             _ => {
@@ -808,7 +925,7 @@ impl SseEncode for crate::api::nlip_api::Clip {
         <crate::api::nlip_api::ClipCreator>::sse_encode(self.creator, serializer);
         <String>::sse_encode(self.created_at, serializer);
         <String>::sse_encode(self.updated_at, serializer);
-        <String>::sse_encode(self.file_path, serializer);
+        <Option<String>>::sse_encode(self.file_path, serializer);
     }
 }
 
@@ -866,6 +983,16 @@ impl SseEncode for crate::api::nlip_api::LoginResponse {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.jwt_token, serializer);
         <crate::api::nlip_api::User>::sse_encode(self.user, serializer);
+    }
+}
+
+impl SseEncode for Option<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <String>::sse_encode(value, serializer);
+        }
     }
 }
 

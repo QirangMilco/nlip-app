@@ -26,8 +26,8 @@ class WindowUtils {
         await windowManager.ensureInitialized();
 
         WindowOptions windowOptions = const WindowOptions(
-          size: Size(450, 700),
-          minimumSize: Size(400, 600),
+          size: Size(950, 750),
+          minimumSize: Size(900, 700),
           title: 'Nlip',
           titleBarStyle: TitleBarStyle.hidden,
           center: true,
@@ -79,6 +79,31 @@ class WindowUtils {
       await windowManager.close();
     } catch (e) {
       debugPrint('Error closing window: $e');
+    }
+  }
+
+  static Future<bool> isAlwaysOnTop() async {
+    return await windowManager.isAlwaysOnTop();
+  }
+
+  static Future<void> setAlwaysOnTop(bool alwaysOnTop) async {
+    try {
+      await windowManager.setAlwaysOnTop(alwaysOnTop);
+    } catch (e) {
+      debugPrint('Error setting always on top: $e');
+    }
+  }
+
+  static Future<void> toggleAlwaysOnTop() async {
+    try {
+      final isAlwaysOnTop = await windowManager.isAlwaysOnTop();
+      if (isAlwaysOnTop) {
+        await windowManager.setAlwaysOnTop(false);
+      } else {
+        await windowManager.setAlwaysOnTop(true);
+      }
+    } catch (e) {
+      debugPrint('Error toggling always on top: $e');
     }
   }
 

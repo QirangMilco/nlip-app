@@ -18,6 +18,9 @@ class HotkeyUtils {
   }
 
   static Future<void> initHotkey(onUpload, onPaste) async {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return;
+    }
     await unregisterAllHotkeys();
     
     _onUploadCallback = onUpload;

@@ -2,6 +2,8 @@ use log::debug;
 use serde::{Deserialize, Serialize};
 use reqwest::Client;
 use std::fmt::Debug;
+use crate::nlip_utils::{paste_text, get_text};
+use crate::error::NlipError;
 
 #[flutter_rust_bridge::frb(sync)] // Synchronous mode for simplicity of the demo
 pub fn greet(name: String) -> String {
@@ -20,6 +22,7 @@ pub enum ApiError {
     NetworkError(String),
     ServerError {code: i32, message: String},
     DeserializeError(String),
+    ClientError(String),
     Other(String),
 }
 
@@ -29,12 +32,19 @@ impl std::fmt::Display for ApiError {
             Self::NetworkError(e) => write!(f, "Network error: {}", e),
             Self::ServerError { code, message } => write!(f, "Server error: {} - {}", code, message),
             Self::DeserializeError(e) => write!(f, "Deserialize error: {}", e),
+            Self::ClientError(e) => write!(f, "Client error: {}", e),
             Self::Other(e) => write!(f, "Other error: {}", e),
         }
     }
 }
 
 impl std::error::Error for ApiError {}
+
+impl From<NlipError> for ApiError {
+    fn from(error: NlipError) -> Self {
+        ApiError::ClientError(error.to_string())
+    }
+}
 
 fn create_client() -> Client {
     Client::builder()
@@ -159,8 +169,8 @@ pub struct Clip {
     pub created_at: String,
     #[serde(rename = "updatedAt")]
     pub updated_at: String,
-    #[serde(rename = "filePath")]
-    pub file_path: String,
+    #[serde(rename = "filePath", default)]
+    pub file_path: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -180,7 +190,8 @@ pub async fn upload_text_clip(server_url: String, token: String, space_id: Strin
     let url = format!("{}/api/v1/nlip/spaces/{}/clips/upload", server_url.trim_end_matches('/'), space_id);
     let data = serde_json::json!({
         "content": content,
-        "type": "text/plain"
+        "contentType": "text/plain",
+        "spaceId": space_id
     });
 
     api_request(reqwest::Method::POST, &url, Some(&token), Some(data)).await
@@ -234,4 +245,18 @@ pub async fn create_space(server_url: String, token: String, name: String) -> Re
     });
     
     api_request(reqwest::Method::POST, &url, Some(&token), Some(data)).await
+}
+
+#[flutter_rust_bridge::frb]
+pub async fn paste_text_from_nlip(server_url: String, token: String, space_id: String) -> Result<(), ApiError> {
+    let text = get_last_clip(server_url, token, space_id).await?;
+    paste_text(text.clip.content.as_str()).map_err(|e| ApiError::ClientError(e.to_string()))?;
+    Ok(())
+}
+
+#[flutter_rust_bridge::frb]
+pub async fn upload_selected_text_to_nlip(server_url: String, token: String, space_id: String) -> Result<(), ApiError> {
+    let text = get_text().map_err(|e| ApiError::ClientError(e.to_string()))?;
+    upload_text_clip(server_url, token, space_id, text).await?;
+    Ok(())
 }

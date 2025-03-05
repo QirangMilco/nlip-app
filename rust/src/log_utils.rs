@@ -32,7 +32,6 @@ fn init_android_logger(default_level: LevelFilter) {
 #[cfg(not(target_os = "android"))]
 fn init_env_logger(default_level: LevelFilter) {
     use env_logger::{Builder, Env};
-    use std::env;
 
     let env = Env::default()
         .filter_or("NLIP_LOG", default_level.to_string())

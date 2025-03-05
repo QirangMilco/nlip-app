@@ -11,7 +11,7 @@ part 'nlip_api.freezed.dart';
 // These functions are ignored because they are not marked as `pub`: `create_client`
 // These functions are ignored because they have generic arguments: `api_request`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `ApiResponse`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`
 
 String greet({required String name}) =>
     RustLib.instance.api.crateApiNlipApiGreet(name: name);
@@ -66,6 +66,26 @@ Future<CreateSpaceResponse> createSpace({
   name: name,
 );
 
+Future<void> pasteTextFromNlip({
+  required String serverUrl,
+  required String token,
+  required String spaceId,
+}) => RustLib.instance.api.crateApiNlipApiPasteTextFromNlip(
+  serverUrl: serverUrl,
+  token: token,
+  spaceId: spaceId,
+);
+
+Future<void> uploadSelectedTextToNlip({
+  required String serverUrl,
+  required String token,
+  required String spaceId,
+}) => RustLib.instance.api.crateApiNlipApiUploadSelectedTextToNlip(
+  serverUrl: serverUrl,
+  token: token,
+  spaceId: spaceId,
+);
+
 @freezed
 sealed class ApiError with _$ApiError implements FrbException {
   const ApiError._();
@@ -77,6 +97,7 @@ sealed class ApiError with _$ApiError implements FrbException {
   }) = ApiError_ServerError;
   const factory ApiError.deserializeError(String field0) =
       ApiError_DeserializeError;
+  const factory ApiError.clientError(String field0) = ApiError_ClientError;
   const factory ApiError.other(String field0) = ApiError_Other;
 }
 
@@ -89,7 +110,7 @@ class Clip {
   final ClipCreator creator;
   final String createdAt;
   final String updatedAt;
-  final String filePath;
+  final String? filePath;
 
   const Clip({
     required this.id,
@@ -100,7 +121,7 @@ class Clip {
     required this.creator,
     required this.createdAt,
     required this.updatedAt,
-    required this.filePath,
+    this.filePath,
   });
 
   @override
