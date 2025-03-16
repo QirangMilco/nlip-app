@@ -8,6 +8,8 @@ import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({super.key});
@@ -72,6 +74,21 @@ class _DesktopAppState extends State<DesktopApp> with TrayListener {
       final prefs = await _prefs;
       await prefs.setBool('silentStart', _silentStart);
     }
+    if (menuItem.key == 'autoStart') {
+      setState(() {
+        _autoStart = menuItem.checked ?? false;
+      });
+      final prefs = await _prefs;
+      await prefs.setBool('autoStart', _autoStart);
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        if (_autoStart) {
+          await launchAtStartup.enable();
+        }
+        else {
+          await launchAtStartup.disable();
+        }
+      }
+    }
   }
   
   Future<void> _initDesktopApp() async {
@@ -87,9 +104,27 @@ class _DesktopAppState extends State<DesktopApp> with TrayListener {
     // 初始化桌面端特有功能
     await WindowUtils.setupWindow(_silentStart);
     await HotkeyUtils.initHotkey(_onUploadHotkey, _onPasteHotkey);
+    
+    await _initLaunchAtStartup(_autoStart);
+    
     // 确保热键设置后UI更新
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  Future<void> _initLaunchAtStartup(_autoStart) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    launchAtStartup.setup(
+      appName: packageInfo.appName,
+      appPath: Platform.resolvedExecutable,
+      packageName: 'com.qr_tech.nlip',
+    );
+    if (_autoStart) {
+      launchAtStartup.enable();
+    }
+    else {
+      launchAtStartup.disable();
     }
   }
   
@@ -129,6 +164,15 @@ class _DesktopAppState extends State<DesktopApp> with TrayListener {
     await trayManager.setToolTip('Nlip');
     Menu menu = Menu(
       items: [
+        MenuItem(
+          key: 'autoStart',
+          checked: _autoStart,
+          label: '开机自启',
+          type: 'checkbox',
+          onClick: (menuItem) {
+            menuItem.checked = !(menuItem.checked ?? false);
+          },
+        ),
         MenuItem(
           key: 'silentStart',
           checked: _silentStart,
@@ -287,8 +331,12 @@ class _DesktopAppState extends State<DesktopApp> with TrayListener {
     
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        // await windowManager.setAutoLaunch(value);
-        // ToDo: 设置开机自启
+        if (value) {
+          await launchAtStartup.enable();
+        }
+        else {
+          await launchAtStartup.disable();
+        }
       }
     } catch (e) {
       debugPrint('Error setting auto launch: $e');
@@ -659,9 +707,7 @@ class _DesktopAppState extends State<DesktopApp> with TrayListener {
             subtitle: const Text('应用将在系统启动时自动运行'),
             value: _autoStart,
             activeColor: const Color(0xFF007AFF),
-            onChanged: (Platform.isWindows || Platform.isLinux || Platform.isMacOS) 
-              ? _toggleAutoStart 
-              : null,
+            onChanged: _toggleAutoStart,
             secondary: const Icon(Icons.power_settings_new),
           ),
           const Divider(),

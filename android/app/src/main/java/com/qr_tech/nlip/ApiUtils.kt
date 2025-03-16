@@ -17,11 +17,22 @@ class ApiUtils(flutterEngine: FlutterEngine) {
      * 获取最近的 Clip
      * @return 返回最近的 Clip 内容，如果出错则返回空字符串
      */
-    suspend fun getLastClip(): String = withContext(Dispatchers.IO) {
+    suspend fun getLastClip(): String = withContext(Dispatchers.Main) {
         try {
-            val result = methodChannel.invokeMethod<String>("getLastClip", null)
+            var result = ""
+            methodChannel.invokeMethod("getLastClip", null, object : MethodChannel.Result {
+                override fun success(response: Any?) {
+                    result = response as? String ?: ""
+                }
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    Log.e(tag, "获取最近 Clip 错误: $errorCode, $errorMessage")
+                }
+                override fun notImplemented() {
+                    Log.e(tag, "获取最近 Clip 方法未实现")
+                }
+            })
             Log.d(tag, "获取最近 Clip 成功: $result")
-            return@withContext result ?: ""
+            return@withContext result
         } catch (e: Exception) {
             Log.e(tag, "获取最近 Clip 失败", e)
             return@withContext ""
@@ -33,11 +44,22 @@ class ApiUtils(flutterEngine: FlutterEngine) {
      * @param content 要上传的文本内容
      * @return 上传是否成功
      */
-    suspend fun uploadTextClip(content: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun uploadTextClip(content: String): Boolean = withContext(Dispatchers.Main) {
         try {
-            val result = methodChannel.invokeMethod<Boolean>("uploadTextClip", mapOf("content" to content))
-            Log.d(tag, "上传文本 Clip ${if (result == true) "成功" else "失败"}")
-            return@withContext result ?: false
+            var success = false
+            methodChannel.invokeMethod("uploadTextClip", mapOf("content" to content), object : MethodChannel.Result {
+                override fun success(response: Any?) {
+                    success = response as? Boolean ?: false
+                }
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    Log.e(tag, "上传文本 Clip 错误: $errorCode, $errorMessage")
+                }
+                override fun notImplemented() {
+                    Log.e(tag, "上传文本 Clip 方法未实现")
+                }
+            })
+            Log.d(tag, "上传文本 Clip ${if (success) "成功" else "失败"}")
+            return@withContext success
         } catch (e: Exception) {
             Log.e(tag, "上传文本 Clip 失败", e)
             return@withContext false

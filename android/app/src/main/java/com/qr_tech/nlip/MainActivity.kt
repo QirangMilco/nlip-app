@@ -6,8 +6,8 @@ import android.content.ComponentName
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import android.content.Intent
-import android.content.ClipboardManager
-import android.util.Log
+import androidx.annotation.NonNull
+import io.flutter.embedding.engine.FlutterEngine
 
 class MainActivity : FlutterActivity() {
     private lateinit var apiUtils: ApiUtils
@@ -16,24 +16,12 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            //获取剪切板文字逻辑写到这里。
-            Log.d("NlipClipoard", "已获取焦点")
-            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = clipboard.getPrimaryClip()
-            if (clip != null && clip.getItemCount() > 0) {
-                val text = clip.getItemAt(0).text.toString()
-                Log.d("NlipClipboard", "当前剪贴板内容: $text")
-            }
-        }
-    }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         apiUtils = ApiUtils(flutterEngine)
         apiUtils.setupMethodCallHandler()
+        NlipFxManager.install(application, apiUtils)
     }
 
 

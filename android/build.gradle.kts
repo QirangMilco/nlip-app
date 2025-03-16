@@ -1,7 +1,11 @@
 allprojects {
     repositories {
         google()
-        mavenCentral()
+        mavenCentral()  // 确保mavenCentral存在
+        // 移除JitPack仓库配置
+        maven { 
+            url = uri("https://maven.aliyun.com/repository/public/") 
+        }
     }
 }
 

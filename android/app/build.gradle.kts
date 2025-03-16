@@ -54,4 +54,6 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22")
+    implementation("io.github.petterpx:floatingx:2.3.2")
+    implementation("io.github.petterpx:floatingx-compose:2.3.2")
 }
