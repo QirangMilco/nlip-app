@@ -252,9 +252,10 @@ class ApiService {
         token: _jwtToken,
         spaceId: _selectedSpaceId,
       );
-      if (response.clip.contentType != "text/plain") {
-        return "";
-      }
+      // if (response.clip.contentType != "text/plain") {
+      //   return "";
+      // }
+      debugPrint('Get last clip content: ${response.clip.content}');
       return response.clip.content;
     } catch (e) {
       debugPrint('Get last clip error: $e');

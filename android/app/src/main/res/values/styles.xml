@@ -12,11 +12,36 @@
          running.
 
          This Theme is only used starting with V2 of Flutter's Android embedding. -->
-    <style name="NormalTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="NormalTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">?android:colorBackground</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation</item>
     </style>
+    <style name="Theme.AppCompat.Light.NoActionBar.TranslucentDecor" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    <style name="WindowAnimation">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+    </style>
+    <style name="AppleButtonStyle">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">#F5F5F7</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
+    <style name="AppleCloseButtonStyle" parent="AppleButtonStyle">
+        <item name="android:textColor">#1B1B1B</item>
+        <item name="android:background">@drawable/button_close_background</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
 </resources>

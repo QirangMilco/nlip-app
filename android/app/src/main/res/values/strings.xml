@@ -1,5 +1,8 @@
 <resources>
     <string name="accessibility_service_description">用于获取选中文本内容</string>
 
-    <string name="floating_title">Nlip浮窗</string>
+    <string name="floating_title">Nlip</string>
+    <string name="upload_string">上传</string>
+    <string name="download_string">同步</string>
+    <string name="close_string">关闭</string>
 </resources>

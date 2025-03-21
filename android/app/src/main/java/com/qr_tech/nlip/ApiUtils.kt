@@ -19,20 +19,25 @@ class ApiUtils(flutterEngine: FlutterEngine) {
      */
     suspend fun getLastClip(): String = withContext(Dispatchers.Main) {
         try {
-            var result = ""
-            methodChannel.invokeMethod("getLastClip", null, object : MethodChannel.Result {
-                override fun success(response: Any?) {
-                    result = response as? String ?: ""
-                }
-                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                    Log.e(tag, "获取最近 Clip 错误: $errorCode, $errorMessage")
-                }
-                override fun notImplemented() {
-                    Log.e(tag, "获取最近 Clip 方法未实现")
-                }
-            })
-            Log.d(tag, "获取最近 Clip 成功: $result")
-            return@withContext result
+            return@withContext kotlin.coroutines.suspendCoroutine { continuation ->
+                methodChannel.invokeMethod("getLastClip", null, object : MethodChannel.Result {
+                    override fun success(response: Any?) {
+                        val result = response as? String ?: ""
+                        Log.d(tag, "获取最近 Clip 成功: $result")
+                        continuation.resumeWith(Result.success(result))
+                    }
+                    
+                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                        Log.e(tag, "获取最近 Clip 错误: $errorCode, $errorMessage")
+                        continuation.resumeWith(Result.success(""))
+                    }
+                    
+                    override fun notImplemented() {
+                        Log.e(tag, "获取最近 Clip 方法未实现")
+                        continuation.resumeWith(Result.success(""))
+                    }
+                })
+            }
         } catch (e: Exception) {
             Log.e(tag, "获取最近 Clip 失败", e)
             return@withContext ""
@@ -46,20 +51,25 @@ class ApiUtils(flutterEngine: FlutterEngine) {
      */
     suspend fun uploadTextClip(content: String): Boolean = withContext(Dispatchers.Main) {
         try {
-            var success = false
-            methodChannel.invokeMethod("uploadTextClip", mapOf("content" to content), object : MethodChannel.Result {
-                override fun success(response: Any?) {
-                    success = response as? Boolean ?: false
-                }
-                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                    Log.e(tag, "上传文本 Clip 错误: $errorCode, $errorMessage")
-                }
-                override fun notImplemented() {
-                    Log.e(tag, "上传文本 Clip 方法未实现")
-                }
-            })
-            Log.d(tag, "上传文本 Clip ${if (success) "成功" else "失败"}")
-            return@withContext success
+            return@withContext kotlin.coroutines.suspendCoroutine { continuation ->
+                methodChannel.invokeMethod("uploadTextClip", mapOf("content" to content), object : MethodChannel.Result {
+                    override fun success(response: Any?) {
+                        val success = response as? Boolean ?: false
+                        Log.d(tag, "上传文本 Clip ${if (success) "成功" else "失败"}")
+                        continuation.resumeWith(Result.success(success))
+                    }
+                    
+                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                        Log.e(tag, "上传文本 Clip 错误: $errorCode, $errorMessage")
+                        continuation.resumeWith(Result.success(false))
+                    }
+                    
+                    override fun notImplemented() {
+                        Log.e(tag, "上传文本 Clip 方法未实现")
+                        continuation.resumeWith(Result.success(false))
+                    }
+                })
+            }
         } catch (e: Exception) {
             Log.e(tag, "上传文本 Clip 失败", e)
             return@withContext false

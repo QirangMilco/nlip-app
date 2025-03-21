@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#F5F5F5"/>  <!-- 稍微不同的颜色表示焦点状态 -->
+    <corners android:radius="20dp"/>
+    <stroke android:color="#4285F4" android:width="2dp"/> <!-- 焦点状态边框 -->
+</shape> 

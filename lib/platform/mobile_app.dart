@@ -186,35 +186,36 @@ class _MobileAppState extends State<MobileApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                  // 标题栏
-                  _buildLogo(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    // 标题栏
+                    _buildLogo(),
 
-                  // 服务器连接区域
-                  _buildServerConnectionSection(),
-                  
-                  // 空间选择区域
-                  if (_apiService.isLoggedIn)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 32),
-                        _buildSpaceManagementSection(),
-                      ],
-                    ),
-                  ],
+                    // 服务器连接区域
+                    _buildServerConnectionSection(),
+                    
+                    // 空间选择区域
+                    if (_apiService.isLoggedIn)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 32),
+                          _buildSpaceManagementSection(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

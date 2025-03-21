@@ -8,12 +8,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.TranslucentDecor"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="false"
+            android:windowSoftInputMode="adjustResize"
+            android:windowIsFloating="true"
+            android:windowCloseOnTouchOutside="true"
+            android:allowEmbedded="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -49,16 +54,35 @@
         <!-- 新增磁贴服务 -->
         <service
             android:name=".QuickTileService"
-            android:label="Nlip"
+            android:label="Nlip浮窗"
             android:exported="true"
             android:launchMode="singleTop"
-            android:icon="@mipmap/launcher_icon"
+            android:icon="@drawable/tile_white"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:targetApi="n">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+        <service
+            android:name=".QuickWindowTileService"
+            android:label="Nlip小窗"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:icon="@drawable/tile_white"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:targetApi="n">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name=".FloatingWindowActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.TranslucentDecor"
+            android:windowIsFloating="true"
+            android:windowCloseOnTouchOutside="true"/>
 <!--        <service-->
 <!--            android:name=".TextSelectionService"-->
 <!--            android:label="Nlip文本获取服务"-->

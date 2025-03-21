@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -29,16 +31,37 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         resValue("string", "accessibility_service_description", "用于获取选中文本内容")
-        //ndk {
-            //abiFilters.add("arm64-v8a")
-        //}   
+        // ndk {
+        //     abiFilters.add("arm64-v8a")
+        //     abiFilters.add("armeabi-v7a")
+        //     abiFilters.add("x86_64")
+        // }
+    }
+
+    signingConfigs {
+        create("keyStore") {
+            keyAlias = "key0"
+            keyPassword = "Jk4A8\$#a!&j3^s"
+            storeFile = file("${rootDir.absolutePath}/key.jks")
+            storePassword = "Jk4A8\$#a!&j3^s"
+        }
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+//            signingConfig = signingConfigs.getByName("debug")
+            val signConfig = signingConfigs.getByName("keyStore")
+            release {
+                isMinifyEnabled = true
+                isShrinkResources = true
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
+                signingConfig = signConfig
+            }
         }
     }
 }

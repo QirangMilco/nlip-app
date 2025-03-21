@@ -18,6 +18,7 @@ import android.util.Log
 import com.petterp.floatingx.listener.IFxPermissionAskControl
 import com.petterp.floatingx.listener.IFxViewLifecycle
 import com.petterp.floatingx.view.FxViewHolder
+import kotlinx.coroutines.withContext
 
 object NlipFxManager {
     lateinit var context: Application
@@ -84,12 +85,12 @@ object NlipFxManager {
 
         if (hasFocus) {
             val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            var lastClip = ""
             coroutineScope.launch {
-                lastClip = apiUtils.getLastClip()
+                val lastClip = apiUtils.getLastClip()
+                Log.d("NlipFxManager", "下载剪贴板内容: $lastClip")
+                clipboard.setPrimaryClip(ClipData.newPlainText(null, lastClip))
+                hide()
             }
-            clipboard.setPrimaryClip(ClipData.newPlainText(null, lastClip))
-            hide()
         }
     }
 

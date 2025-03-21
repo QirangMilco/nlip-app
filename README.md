@@ -1,16 +1,14 @@
 # nlip_app
 
-A new Flutter project.
+由rust和flutter开发的多平台[Nlip](https://github.com/QirangMilco/nlip)客户端。
 
-## Getting Started
+* windows端
 
-This project is a starting point for a Flutter application.
+![windows_main](doc/windows_main.png "客户端界面")
 
-A few resources to get you started if this is your first Flutter project:
+* Android端
+![andorid_main](doc/android_main.png "App界面")
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![android_tile](doc/android_tile.png "磁贴")
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![android_floating_window](doc/android_floating_window.png "浮窗")
