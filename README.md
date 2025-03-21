@@ -7,6 +7,7 @@
 ![windows_main](doc/windows_main.png "客户端界面")
 
 * Android端
+
 ![andorid_main](doc/android_main.png "App界面")
 
 ![android_tile](doc/android_tile.png "磁贴")
